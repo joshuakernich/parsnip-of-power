@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Parsnip of Power</title>
+	<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+	<script type="text/javascript" src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
+	<script type="text/javascript" src='./jquery-ui.min.js'></script>
+	
+
+	<style type="text/css">
+		@font-face{
+			font-family: VT323;
+  			src: url(./VT323-Regular.ttf);
+		}
+
+		body{
+			background: black;
+			padding: 0px;
+			margin: 0px;
+			font-family: 'VT323', monospace;
+			font-size: 40px;
+		}
+
+		.parsnip{
+			width: 160px;
+			height: 150px;
+			background-image: url('./sprites/Parsnip.png');
+			background-size: 100%;
+			position: absolute;
+		}
+
+		.scene{
+			background: #5555ff;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+		}
+
+		.scene{
+			
+			background-size: 100%;
+			image-rendering: pixelated;
+		}
+
+		.screensaver{
+			background: #111;
+		}
+
+		.screen{
+			width: 1024px;
+			height: 768px;
+			margin: auto;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			background: #222;
+			overflow: hidden;
+		}
+
+		.dust{
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+		}
+
+		.particle{
+			position: absolute;
+			width: 10px;
+			height: 10px;
+			background: rgba(255,255,255,0.2);
+			border: 1px solid rgba(255,255,255,0.2);
+		}
+
+		.overlay{
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			background-image: url('./vhs-overlay.gif');
+			background-size: cover;
+			mix-blend-mode: lighten;
+			opacity: 0.2;
+
+		}
+
+		.window{
+			
+			border: 4px solid transparent;
+			border-image: url('./window.png');
+			border-image-slice: 4;
+			border-image-width: 2;
+			box-sizing: border-box;
+			display: inline-block;
+			position: absolute;
+
+			
+			cursor: pointer;
+			transform-origin: top left;
+			background: white;
+			padding: 4px;
+
+			top:150px;
+			left: 250px;
+
+			transform:scale(0);
+		}
+
+		.window:before{
+			content: "";
+			width: 100%;
+			height: 38px;
+			background-image: url('./window.png');
+			background-size: 1024px;
+			background-position: -8px -8px;
+			display: block;
+		}
+
+	
+
+		.icon{
+			width: 60px;
+			min-height: 60px;
+			background-image: url('./sprites/Parsnip.png');
+			background-size: 100%;
+			background-position: top center;
+			background-repeat: no-repeat;
+			display: inline-block;
+			margin: 10px 20px 0px 0px;
+			color: white;
+			font-size: 22px;
+			padding-top: 65px;
+			vertical-align: top;
+			text-align: center;
+
+		}
+
+		.icon.folder{
+			background-image: url('./icon-folder.png');
+		}
+
+		.icon.video{
+			background-image: url('./icon-video.png');
+		}
+
+		.desktop{
+			padding: 50px;
+		}
+
+		.start-bar{
+			position: absolute;
+			bottom: 0px;
+			left: 0px;
+			right: 0px;
+			height: 50px;
+			background-image: url(./start-bar.png);
+			background-size: 100%;
+			background-position: left bottom;
+			background-repeat: no-repeat;
+		}
+
+		.window .icon{
+			color: black;
+
+		}
+
+
+
+		.window h1{
+			position: absolute;
+			top: 5px;
+			left: 50px;
+			font-size: 30px;
+			color: white;
+			margin: 0px;
+
+		}
+
+		.time{
+			position: absolute;
+			right: 15px;
+			bottom: 10px;
+			font-size: 25px;
+		}
+
+		.close-button{
+			width: 45px;
+			height: 45px;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+		}
+
+		.window.fullscreen{
+			top: 0px;
+			left: 0px;
+			width: 100%;
+			height: 100%;
+			
+		}
+
+		.window-contents{
+			
+			
+			width: 100%;
+			height: calc(100% - 38px);
+			/*background-image: url(./bg-sparkles.gif);
+			background-size: cover;*/
+
+			position: relative;
+		}
+
+		.window-icons{
+			padding: 20px;
+		}
+
+		.window-layer{
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+
+		}
+
+		.window.show{
+			display: block;
+			transform: scale(1);
+		}
+
+		.title-card{
+			text-align: center;
+			color: white;
+		}
+
+		.title-card h2:before, .title-card h2:after{
+			content: "-";
+		}
+
+		.title-card h3,.title-card h2{
+			
+			margin: 0px;
+			padding: 0px;
+		}
+
+		.title-card h3{
+			font-size: 100px;
+			display: inline-block;
+			margin: 0px 20px;
+		}
+
+		.synthwave{
+			overflow: hidden;
+		}
+
+		.flying-parsnip{
+			position: absolute;
+			transform: translate(-50%,-50%);
+			width: 100px;
+			height: 100px;
+			background-image: url('./icon-parsnip.png');
+			background-repeat: no-repeat;
+			background-size: 100%;
+			opacity: 0.8;
+
+
+		}
+
+		.porn-masker{
+			overflow: hidden;
+		}
+
+
+	</style>
+	<script type="text/javascript">
+		$(function(){
+			
+			$('.screensaver').click(function(){
+				$(this).hide();
+			});
+
+			$('.microsoft').click(function(){
+				$(this).hide();
+			});
+
+			$('.synthwave').click(function(){
+				$('.porn').show();
+				$('.porn-masker').css({height:0}).animate({height:'100%'},{duration:25000,easing:'linear'});
+			})
+
+			$(window).keydown(function(){
+				//nextScreen();
+			})
+
+			$('.window').draggable({start:onStartDrag});
+
+			var z = 1;
+			function onStartDrag(e,ui){
+				toFront(this);
+			}
+
+			function toFront(thing){
+				$(thing).css('z-index',z++);
+			}
+
+			$('.icon').click(onIcon);
+
+			function onIcon(){
+				var w = $(this).data('window');
+				if( w ){
+					var $w = $('.window.'+w).show();
+					toFront( $w );
+
+					var position = $w.position();
+
+					$w.offset($(this).offset());
+					var obj = {scale:0.2};
+					$w.css({transform:'scale(0.2)'});
+
+					$w.animate({left:position.left,top:position.top});
+
+					$(obj).animate({scale:0.9999},{step:function(a){
+						$w.css({transform:'scale('+a+')'});
+					}});
+
+				}
+			}
+
+			$('.window').each(function(){
+				var t = this;
+				$('<div class="close-button">').appendTo(this).click(function(){
+					$(t).css({transform:'scale(0)'});
+				})
+
+			})
+
+
+
+			$('.password').keypress(function(e){
+				if(e.which == 13){
+					$('.password').css({background:'yellow'}).animate({opacity:0});
+					$('.window.connecting').addClass('show');
+					//$('audio')[0].play();
+					$('.window.interweb .synthwave').show().css({opacity:0}).delay(8000).animate({opacity:1},4000);
+
+					for(var i=0; i<10; i++){
+						$('<div class="flying-parsnip">').appendTo('.synthwave').data({r:Math.random()*Math.PI*2,p:Math.random()})
+					}
+
+
+					setInterval(function(){
+						$('.flying-parsnip').each(function(){
+							var d = $(this).data();
+							d.p += 0.02;
+							if(d.p>1){
+								d.r = Math.random()*Math.PI*2;
+								d.p = d.p%1;
+							}
+							$(this).data(d).css({width:40+d.p*200,height:40+d.p*200,left:(50+Math.cos(d.r)*d.p*80)+'%',top:(55+Math.sin(d.r)*d.p*80)+'%'});
+						})
+					},100);
+				}
+			})
+		})
+	</script>
+	<script type="text/javascript" src="./screen-saver.js"></script>
+</head>
+<body>
+	<div class='screen'>
+		
+		<div class='scene' style="background-image: url(./bg-desktop-clear.png)">
+			<div class='desktop'>
+				<div class='start-bar'><div class='time'>3:45 pm</div></div>
+				<div class='icon' style="background-image: url(./icon-computer.png)">Proper Spud</div>
+				<div class='icon' data-window='trash' style="background-image: url(./icon-bin.png)">Trash</div><br>
+				<div class='icon' data-window='interweb' style="background-image: url(./icon-interweb.png)">The Interweb</div>
+				
+				<div class='icon' data-window='chapters'>Parsnip</div><br>
+				<div class='icon' data-window='potato' style="background-image: url(./icon-potato.png)">Actual Potato</div>
+				<div class='icon folder' data-window='school'>School Work</div>
+				<div class='window chapters' style='left:300px;top:150px;'>
+					<h1>Parsnip</h1>
+					<div class='window-icons'>
+						<div class='icon' data-window='spud' style="background-image: url(./icon-potato.png)">The Spud</div>
+						<div class='icon' data-window='raven' style="background-image: url(./icon-raven.png)">The Raven</div>
+						<div class='icon' data-window='towel' style="background-image: url(./icon-towel.png)">Burnt Orange Towel</div>
+						<div class='icon' data-window='meatballs' style="background-image: url(./icon-meatballs.png)">Swedish Meatballs</div>
+						<div class='icon' data-window='pills' style="background-image: url(./icon-pill.png)">Little Blue Pills</div><br><br>
+						<div class='icon' data-window='fapstronaut' style="background-image: url(./icon-fapstronaut.png)">Fapstro-nauts</div>
+						<div class='icon' data-window='doldrums' style="background-image: url(./icon-ship.png)">The Doldrums</div>
+						<div class='icon' data-window='letter' style="background-image: url(./icon-love-letter.png)">Dear Raven</div>
+						<div class='icon' data-window='wood' style="background-image: url(./icon-wood.png)">Morning Wood</div>
+					</div>
+				</div>
+				</div>
+				<div class="window potato"><h1>Actual Potato</h1><img width=500 src="./bg-potato.jpg"></div>
+				<div class="window trash"><h1>Trash</h1><div class='window-icons'><div class='icon' style="background-image: url(./icon-swede.png)">Swede</div><div class='icon' style="background-image: url(./icon-turnip.png)">Turnip</div><div class='icon' style="background-image: url(./icon-radish.png)">Radish</div></div></div>
+				<div class='window towel fullscreen'>
+					<div class='window-contents'>
+						<div class='window-layer' style="background-size:cover;background-position:center;background-image: url(./bg-tv.gif)"></div>
+						<div class='window-layer' style="background: rgba(0,0,0,0.2);"></div>
+						<div class='window-layer'>
+							<div class='title-card'>
+								<br>
+								<br>
+								<h2>Chapter 3</h2>
+								<h3>Burnt</h3><h3>Orange</h3><h3>Towel</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class='window meatballs fullscreen'>
+					<div class='window-contents'>
+						<div class='window-layer' style="background-size:cover;background-position:center;background-image: url(./bg-bed-with-phone.png)">
+							
+						</div>
+						<div class='window-layer' style="opacity:0.2;background-size:150%;background-position:left;background-image: url(./bg-blinds.gif)">
+							
+							
+						</div>
+						<div class="window-layer">
+							<div style="width:50px;height:105px;background-image:url(./beating-heart.gif);background-position: center;background-size:cover;position: absolute;left:310px;top:508px;transform-origin: top left;transform: rotate(-52deg) skew(0deg,37deg);"></div>
+						</div>
+						<div class='window-layer'>
+							<div class='title-card' style='color:white;text-shadow: 5px 5px #080185;'>
+								<br>
+								<h2>Chapter 4</h2>
+								<h3>Swedish Meatballs</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class='window pills fullscreen'>
+					<div class='window-contents'>
+						<div class='window-layer' style="background-size:150%;background-image: url(./bg-office-computer-gray.png)">
+
+							<div style="position:absolute;border-radius:40px;top:250px;left:200px;width:300px;height:230px;background-position:top left;background-size:cover;background-image: url(./bg-snake.gif)"></div>
+
+						</div>
+						<div class='window-layer' style="opacity:0.8;background-size:150%;background-image: url(./bg-office-computer-shine.png)">
+							
+
+						</div>
+						
+						<div class='window-layer'>
+							<div class='title-card' style="color:#080185">
+								<br>
+								<h2>Chapter 5</h2>
+								<h3>Little Blue Pills</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class='window fapstronaut fullscreen'>
+					<div class='window-contents'>
+						<div class='window-layer' style="background-size:cover;background-position:center;background-image: url(./bg-fapstro-shuttle.gif)"></div>
+						<div class='window-layer'>
+							<div class='title-card' style="width:80%;margin-left:20%;">
+								
+								<br><br>
+								<br>
+								<h2>Chapter 6</h2>
+								<h3>The Fapstronauts</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class='window raven fullscreen'>
+					<div class='window-contents'>
+						<div class='window-layer' style="background-size:cover;background-image: url(./bg-beach.gif)"></div>
+						<div class='window-layer' style="background: rgba(0,0,0,0);"></div>
+						<div class='window-layer'>
+							<div class='title-card' style='margin-left:30%;color:#AFEEFF;width:70%;'>
+								<br><br>
+								<br><br>
+								<h2>Chapter 2</h2>
+								<h3>The Raven</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class='window spud fullscreen'>
+					<div class='window-contents'>
+						<div class='window-layer' style="background-size:cover;background-position:top center;background-image: url(./bg-tin-shed.png)">
+							<div style="background-image: url(./bg-spud.gif);width:180px;height:160px;background-size: cover;position: absolute;right: 250px;bottom: 75px;transform: scaleX(-1);"></div>
+						</div>
+						
+						<div class='window-layer'>
+							<div class='title-card' style='color:#000099'>
+								<br><br>
+								<br><br>
+								<br><br>
+								<h2>Chapter 1</h2>
+								<h3>The Spud</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class='window letter fullscreen'>
+					<div class='window-contents'>
+						<div class='window-layer' style="background-size:cover;background-position:center;background-image: url(./bg-sitting.gif)"></div>
+						
+						<div class='window-layer'>
+							<div class='title-card' style='color:#B09CBC;width:110%;'>
+								<br>
+								<h2>Chapter 8</h2>
+								<h3>Dear Raven</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class='window doldrums fullscreen'>
+					<div class='window-contents'>
+						<div class='window-layer' style="background-size:cover;background-position:center;background-image: url(./bg-ocean.gif)"></div>
+						<div class='window-layer' style="background-size:cover;background-position:center;background-image: url(./vhs-overlay.gif);opacity: 0.2;"></div>
+						
+						<div class='window-layer'>
+							<div class='title-card' style='color:#D6EAFD'>
+								
+								
+								<br>
+								<br>
+								<br>
+								<h2>Chapter 7</h2>
+								<h3>The Doldrums</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class='window wood fullscreen'>
+					<div class='window-contents'>
+						<div class='window-layer' style="background-size:cover;background-position:center;background-image: url(./bg-morning-wood.gif)"></div>
+						
+						<div class='window-layer'>
+							<div class='title-card' style='width:60%'>
+								<br>
+								<br>
+								<h2>Chapter 9</h2>
+								<h3>Morning Wood</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class='window interweb' style='width:1000px;height:650px;top:15px;left:15px;'>
+					<div class='window-contents'>
+						<div class='window-layer' style="background-size:cover;background-position:top center;background-image: url(./bg-globe.gif)"></div>
+						<div class='window-layer' style="background-repeat:no-repeat;background-size:80%;background-position:center;background-image: url(./title-interweb.gif)"></div>
+						<div class='window-layer' style='text-align: center;'>
+							<br><br><br><br><br><br><br><br><br>
+							<h2 style='margin: 0px; color: white;'>Enter Password</h2>
+							<input class='password' type='password' style="font:inherit;"></input>
+
+							<div class='window connecting' style='width:500px;height:250px;top:200px;left:250px;'>
+								<h1>Dialing...</h1>
+								<div class='window-contents' style=""><div class='window-layer' style="background-size:110%;background-position:center -50px;background-image: url(./bg-dialing.gif)"></div></div>
+								<audio>
+									<source src="./sound-dial.mp3" type="">
+								</audio>
+							</div>
+						</div>
+						<div class='window-layer' style="display:none;background-repeat:no-repeat;background-size:cover;background-position:center;background-image: url(./bg-synthwave.gif)"></div>
+						<div class='window-layer synthwave' style="display:none;background-size:130%;background-position:center -80px;background-image: url(./bg-synthwave.gif)"></div>
+						<div class='window-layer porn' style="display:none;background:white">
+							<div class="hourglass" style="background-image:url(./hourglass.gif);background-position:center;background-size:200%;width:100px;height:100px;position: absolute;bottom:0px;left: 0px;"></div>
+							<div class='porn-masker' style="width:100%;height:100%;position: absolute;top:0px;left: 0px;">
+								<div style="width:100%;height:100%;background-image:url('./bg-porn.jpg');background-size: cover;"></div>
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class='window school' style='top:100px;left:100px;'>
+					<div class='window-icons'>
+						<div class='icon folder'>1995</div>
+						<div class='icon folder'>1996</div>
+						<div class='icon folder'>1997</div>
+						<div class='icon folder'>1998</div>
+						<div class='icon folder' data-window='1999'>1999</div>
+					</div>
+				</div>
+				<div class='window 1999' style='top:120px;left:120px;'>
+					<div class='window-icons'>
+						<div class='icon folder'>English</div>
+						<div class='icon folder'>Tech</div>
+						<div class='icon folder'>Woodwork</div>
+						<div class='icon folder'>Root Veg 101</div>
+						<div class='icon folder'>Sex Ed (Empty)</div>
+		
+						<div class='icon folder' data-window='archive'>Archive</div>
+					</div>
+				</div>
+				<div class='window archive' style='top:50px;left:80px;'>
+					<div class='window-icons'><div class='icon folder' data-window='stuff'>Stuff</div></div>
+				</div>
+				<div class='window stuff' style='top:150px;left:170px;'>
+					<div class='window-icons'><div class='icon folder' data-window='things'>Things</div></div>
+				</div>
+				<div class='window things' style='top:200px;left:200px;'>
+					<div class='window-icons'>
+						<div class='icon video'>Butt Stuff Babes</div>
+						<div class='icon video'>Three Hole Heroes</div>
+						<div class='icon video'>XXX Marks the Slot</div>
+						<div class='icon video'>Butt Stuff Babes Reloaded</div>
+						<div class='icon video'>Butt Stuff Babes Revolution</div><br>
+						<div class='icon video'>Boning Bandits</div>
+						<div class='icon video'>Cum Hither</div>
+						<div class='icon video'>The Yoniverse</div>
+						<div class='icon video'>ASSassins Cream</div>
+					</div>
+				</div>
+				
+			</div>
+		<div class='scene microsoft' style='background-position:center;background-repeat:no-repeat;background-size:contain;background-image: url(./bg-microsoft.png);'>
+			<h2 style="width: 100%;font-size:30px;text-align: center;position: absolute;bottom: 80px;">This shit be loading...</h2>
+		</div>
+		<div class='scene screensaver'>
+			<div class='parsnip'></div>
+		</div>
+		
+	</div>
+</body>
+</html>
